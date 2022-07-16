@@ -1,0 +1,50 @@
+{
+  "name": "ts-inference-check",
+  "description": "Check if type inference is correct",
+  "version": "0.1.0",
+  "main": "dist/commonjs/index.js",
+  "module": "dist/es/index.js",
+  "types": "dist/es/index.d.ts",
+  "files": [
+    "dist/commonjs",
+    "dist/es"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "build-commonjs": "tsc -p conf/typescript/commonjs.json",
+    "build-es": "tsc -p conf/typescript/es.json",
+    "build": "npm run build-commonjs && npm run build-es",
+    "prepack": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loreanvictor/ts-inference-check.git"
+  },
+  "keywords": [
+    "typescript",
+    "inference",
+    "test"
+  ],
+  "author": "Eugene Ghanizadeh Khoub",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/loreanvictor/ts-inference-check/issues"
+  },
+  "homepage": "https://github.com/loreanvictor/ts-inference-check#readme",
+  "devDependencies": {
+    "@babel/core": "^7.18.6",
+    "@babel/preset-env": "^7.18.6",
+    "@sindresorhus/tsconfig": "^3.0.1",
+    "@types/jest": "^28.1.6",
+    "@typescript-eslint/eslint-plugin": "^5.30.6",
+    "@typescript-eslint/parser": "^5.30.6",
+    "babel-jest": "^28.1.3",
+    "eslint": "^8.19.0",
+    "jest": "^28.1.3",
+    "ts-jest": "^28.0.6",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4"
+  }
+}
