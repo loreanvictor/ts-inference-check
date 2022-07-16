@@ -62,6 +62,7 @@ npm test         # 👉 run the tests
 ```
 ```bash
 npm run coverage # 👉 check code coverage
+```
 ```bash
 npm run lint     # 👉 check code style
 ```
