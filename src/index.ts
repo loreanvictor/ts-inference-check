@@ -3,22 +3,19 @@ export type AssertIsExtendedBy<T, Expected> = Expected extends T ? true : false;
 export type AssertEqual<T, Expected> = AssertExtends<T, Expected> & AssertIsExtendedBy<T, Expected>;
 
 
-export function isSameType<T, E>(r: AssertEqual<T, E>) {
-  return r
+export function type<T>(): {
+  is: <E>(_: AssertEqual<T, E>) => AssertEqual<T, E>;
+  extends: <E>(_: AssertExtends<T, E>) => AssertExtends<T, E>;
+  isExtendedBy: <E>(_: AssertIsExtendedBy<T, E>) => AssertIsExtendedBy<T, E>;
 }
 
-
-export function extendsType<T, E>(r: AssertExtends<T, E>) {
-  return r
+export function type<T>(t: T): {
+  is: <E>(_: AssertEqual<T, E>) => AssertEqual<T, E>;
+  extends: <E>(_: AssertExtends<T, E>) => AssertExtends<T, E>;
+  isExtendedBy: <E>(_: AssertIsExtendedBy<T, E>) => AssertIsExtendedBy<T, E>;
 }
 
-
-export function isExtendedByType<T, E>(r: AssertIsExtendedBy<T, E>) {
-  return r
-}
-
-
-export function inferred<T>(_: T) {
+export function type<T>(_?: T) {
   return {
     is: <E>(r: AssertEqual<T, E>) => r,
     extends: <E>(r: AssertExtends<T, E>) => r,
