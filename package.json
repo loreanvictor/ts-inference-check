@@ -15,9 +15,9 @@
     "coverage": "jest --coverage",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
-    "build-commonjs": "tsc -p conf/typescript/commonjs.json",
-    "build-es": "tsc -p conf/typescript/es.json",
-    "build": "npm run build-commonjs && npm run build-es",
+    "build:commonjs": "tsc -p conf/typescript/commonjs.json",
+    "build:es": "tsc -p conf/typescript/es.json",
+    "build": "npm run build:commonjs && npm run build:es",
     "prepack": "npm run build"
   },
   "repository": {
