@@ -1,7 +1,7 @@
 {
   "name": "ts-inference-check",
   "description": "Check if type inference is correct",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "main": "dist/commonjs/index.js",
   "module": "dist/es/index.js",
   "types": "dist/es/index.d.ts",

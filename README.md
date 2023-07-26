@@ -1,12 +1,14 @@
+<div align="right">
+
+[![npm](https://img.shields.io/npm/v/ts-inference-check?color=black&label=&style=flat-square)](https://www.npmjs.com/package/ts-inference-check)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/loreanvictor/ts-inference-check/coverage.yml?label=&style=flat-square)](https://github.com/loreanvictor/ts-inference-check/actions/workflows/coverage.yml)
+
+
+</div>
+
 # ts-inference-check
 
-[![tests](https://github.com/loreanvictor/ts-inference-check/actions/workflows/test.yml/badge.svg)](https://github.com/loreanvictor/ts-inference-check/actions/workflows/test.yml)
-[![coverage](https://github.com/loreanvictor/ts-inference-check/actions/workflows/coverage.yml/badge.svg)](https://github.com/loreanvictor/ts-inference-check/actions/workflows/coverage.yml)
-[![version](https://img.shields.io/npm/v/ts-inference-check?logo=npm)](https://www.npmjs.com/package/ts-inference-check)
-
-
-Provides utilities to test behavior of custom types and type guards in TypeScript code and ensure they provide
-the correct typing with respect to type inference.
+Make sure TypeScript is making the expected type inference from your types.
 
 ```bash
 npm i ts-inference-check --save-dev
@@ -16,34 +18,89 @@ npm i ts-inference-check --save-dev
 
 ## Usage
 
+👉 Check if inferred type of some `obj` is `SomeType` (and is not `SomeOtherType`):
+
 ```ts
 import { type } from 'ts-inference-check'
 
-// Here we use jest as an example, but you can use `ts-inference-check` with any
-// testing library (or even without one), since its tests cause TypeScript to throw compile errors.
 
-expect(type(obj).is<SomeType>(true)).toBe(true)
-expect(type(obj).is<SomeOtherType>(false)).toBe(false)
+type(obj).is<SomeType>(true)
+type(obj).is<SomeOtherType>(false)
 ```
-☝️ `type(...).is<T>()` function only accepts `true` if the inferred type of given object is the expected type, and only accepts `false` otherwise, returning the value it receives in either case. So in the example above, if `obj` is not of type `SomeType`, TypeScript compiler will throw an error, resulting in the test failing.
+
+☝️ `type(...).is<T>(true)` will result in a compiler error if inferred type is not `T`.
+Similarly, `type(...).is<T>(false)` will result in a compiler error if inferred type is `T`.
+
+Example usage in Jest (you can use with any testing library):
+
+```ts
+import { type } from 'ts-inference-check'
+
+test('something', () => {
+  // ...
+
+  expect(type(obj).is<SomeType>(true)).toBe(true)
+  expect(type(obj).is<SomeOtherType>(false)).toBe(false)
+
+  // ...
+})
+```
 
 <br>
 
-```ts
-type(obj).is<SomeType>(true)           // --> ok when `obj` is `SomeType`, compile error o.w.
-type(obj).extends<SomeType>(true)      // --> ok when `obj` is from a type extending `SomeType`, compile error o.w.
-type(obj).isExtendedBy<SomeType>(true) // --> ok when `obj` is from a type that is extended by `SomeType`, compile error o.w.
-```
-☝️ Beyond checking equality, `type()` also provides other functions for checking whether a type extends another type, etc.
+> 💡 `type(...).is<T>()` only accepts `true` if inferred type is `T`, and only accepts `false` if inferred type is not `T`.
+> It will return the given value untouched. All other methods of `type(...)` or `type<T>()` behave in the same manner.
 
 <br>
 
+👉 Check if inferred type is subtype of `SomeType` (and is not subtype of `SomeOtherType`):
+
 ```ts
-type<A>().is<B>(true)                  // --> ok when `A` and `B` are the same type, compile error o.w.
-type<A>().extends<B>(true)             // --> ok when `A` extends `B`, compile error o.w.
-type<A>().isExtendedBy<B>(true)        // --> ok when `A` is extended by `B`, compile error o.w.
+type(obj).extends<SomeType>(true)  
+type(obj).extends<SomeOtherType>(false)
 ```
-☝️ `type()` can also be used without an argument, in which case you need to provide the type you want to check as a type argument directly.
+
+👉 Check if inferred type is super type of `SomeType` (and is not supertype of `SomeOtherType`):
+
+```ts
+type(obj).isExtendedBy<SomeType>(true)
+type(obj).isExtendedBy<SomeOtherType>(false)
+```
+
+👉 Pass type arguments instead of values:
+
+```ts
+type<A>().is<B>(true)
+type<A>().extends<B>(true)
+type<A>().isExtendedBy<B>(true)
+```
+
+<br>
+
+### Strict Checks
+
+👉 `any` passes most of the checks described above. Use `type(...).strictly` to avoid this:
+
+```ts
+type(obj).strictly.is<SomeType>(true)
+type(obj as any).is<SomeType>(true)
+type(obj as any).strictly.is<SomeType>(false)
+```
+```ts
+type(obj as any).extends<SomeType>(true)
+type(obj as any).strictly.extends<SomeType>(false)
+type(obj as any).isExtendedBy<SomeType>(true)
+type(obj as any).strictly.isExtendedBy<SomeType>(false)
+```
+
+<br>
+
+👉 Use `.isAny()` to check if inferred type is `any`:
+
+```ts
+type(obj as any).isAny(true)
+type(obj).isAny(false)
+```
 
 <br>
 
