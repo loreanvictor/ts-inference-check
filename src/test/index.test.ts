@@ -69,6 +69,21 @@ describe(type, () => {
     expect(type<A>().isExtendedBy<B>(true)).toBe(true)
     expect(type<B>().isExtendedBy<A>(false)).toBe(false)
   })
+
+  test('type unions are checked strictly.', () => {
+    type<string | number>().is<number>(false)
+    type<string | number>().extends<number>(false)
+    type<string | number>().isExtendedBy<number>(true)
+
+    type<{x: number} | {y: boolean}>().is<{x: number}>(false)
+    type<{x: number} | {y: boolean}>().extends<{x: number}>(false)
+    type<{x: number} | {y: boolean}>().isExtendedBy<{x: number}>(true)
+  })
+
+  test('type intersects are checked strictly.', () => {
+    type<{x: number} & {y: boolean}>().is<{x: number, y: boolean}>(true)
+    type<{x: number} & {y: boolean}>().is<{x: number}>(false)
+    type<{x: number} & {y: boolean}>().extends<{x: number}>(true)
+    type<{x: number} & {y: boolean}>().isExtendedBy<{x: number}>(false)
+  })
 })
-
-
